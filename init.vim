@@ -1,49 +1,74 @@
-" Basic Settings
-se nu rnu ic ts=8 sw=4 sts=4
-syntax on
+"set nu rnu wrap hls ic scs ss=1 ai tabstop=8 softtabstop=4 shiftwidth=4 
+set nu rnu background=dark nowrap tabstop=8 softtabstop=4 shiftwidth=4 hls ic scs ss=1 ai wrap
+set cindent cinkeys-=0#
 
-" Plugins
-call plug#begin('~/vimfiles/plugged')
-
-Plug 'junegunn/vim-easy-align'
+"PLUGINS
+call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-commentary'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'preservim/nerdtree'
-Plug 'vim-scripts/AutoComplPop'
-Plug 'ryanoasis/vim-devicons'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/vim-easy-align'
 Plug 'sainnhe/gruvbox-material'
-
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/AutoComplPop'
+Plug 'tpope/vim-repeat'
 call plug#end()
 
-" Capex
-if (has("termguicolors"))
-    set termguicolors
-endif
-set encoding=UTF-8
-set bg=dark
+" filetype indent off
+filetype plugin indent off
+
+"For vim 8
+ if (has("termguicolors"))
+  set termguicolors
+ endif
+
+set timeoutlen=1000
 
 " Theme
-let g:gruvbox_material_background = 'hard'
-let g:gruvbox_material_better_performance = 1
-let g:gruvbox_material_foreground = 'mix'
-let g:gruvbox_material_enable_bold = 1
-let g:gruvbox_material_visual = 'blue background'
-let g:gruvbox_material_ui_contrast = 'high'
+syntax enable
+let g:gruvbox_material_background             = 'hard'
+let g:gruvbox_material_foreground             = 'mix'
+let g:gruvbox_material_transparent_background = 2
+let g:gruvbox_material_enable_bold            = 1
+let g:gruvbox_material_better_performance     = 1
 colorscheme gruvbox-material
 
-" Mappings
-xmap     ga          <Plug>(EasyAlign)
-nmap     ga          <Plug>(EasyAlign)
-nmap     zz          :w<CR>
-nmap     qq          :q!<CR>
-" Toggle Num-Line
-nnoremap <leader>nu  :set nornu<cr>:set nu<cr>
-nnoremap <leader>no  :set nornu<cr>:set nu<cr>:set nonu<cr>
-nnoremap <leader>rnu :set nonu<cr>:set  rnu<cr>
-" Toggle NERDTree
-nnoremap <leader>n   :NERDTreeFocus<CR>
-nnoremap <C-n>       :NERDTree<CR>
-nnoremap <C-t>       :NERDTreeToggle<CR>
-nnoremap <C-f>       :NERDTreeFind<CR>
-map      <leader>ff  :FZF<CR>
+" Mapping Keys
+map      z           :w<cr>
+map      qq          :q!<cr>
+map      mm          :se mouse=a<cr>
+map      nm          :se mouse=<cr>
+map      <F2>        :wa!<cr>
+map!     <F2>        <esc>:wa!<cr>a
+map      <F5>        :qa!<cr>
+map      <F7>        :vsp<cr>
+nnoremap <leader>nu  :set nornu<cr>:set  nu<cr>
+nnoremap <leader>no  :set nornu<cr>:set  nu<cr>:set nonu<cr>
+nnoremap <leader>=   :set wrap<cr>
+nnoremap <leader>==  :set nowrap<cr>
+nnoremap <leader>rnu :set nonu <cr>:set rnu<cr>
+
+" EasyAlign in visual mode
+xmap ga  <Plug>(EasyAlign)
+xmap lga <Plug>(LiveEasyAlign)
+" EasyAlign for a motion/text object
+nmap ga  <Plug>(EasyAlign)
+nmap lga <Plug>(LiveEasyAlign)
+
+" Commentary
+autocmd FileType php setlocal commentstring=/\/\ %s
+" autocmd FileType perl setlocal commentstring=/# %s
+" autocmd FileType tpl setlocal commentstring=<\!-- %s --\!>
+" autocmd FileType tpl setlocal commentstring=<!--%s--!>
+" autocmd FileType text setlocal commentstring=/# %s
+autocmd FileType sql setlocal commentstring=--%s
+
+" Numberwidth
+if version >= 700
+    set numberwidth=4
+endif
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
